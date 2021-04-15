@@ -3,5 +3,4 @@
 - see this: https://github.com/fussyfangz/closed-caption-cats
 
 stuff to do:
-- check dimensions of image before editing
-- allow user to choose where they save
+- nothing i can think of for the moment :D
