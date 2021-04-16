@@ -3,4 +3,4 @@
 - see this: https://github.com/fussyfangz/closed-caption-cats
 
 stuff to do:
-- nothing i can think of for the moment :D
+- split lines when they get too long.
