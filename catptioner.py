@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from PIL import Image, ImageFont, ImageDraw
 
 
@@ -19,6 +21,19 @@ def getOutputName():
     return outputName
 
 
+def checkForSplit():
+    text = getFullCaption()
+    if len(text) >= 42:
+        splitStrings = []
+        n = 42
+        for index in range(0, len(text), n):
+            splitStrings.append(text[index: index + n])
+        text = splitStrings[0]
+        nextText = splitStrings[1]
+        return text, nextText
+    else:
+        return text
+
 
 def drawText():
     # appearance variables
@@ -27,24 +42,42 @@ def drawText():
 
     # size variables
     x, y = (20, 430)
+    x2, y2 = (20, 407)
     imgw, imgh = img.size
 
     # image resizing
     if (imgw, imgh) == (710, 473):
         print("The image is the recommended size.")
     else:
-        print("The image is " + str(imgw) + "x" + str(imgh) + "\nResizing image to 710x473.")
+        print("The image is " + str(imgw) + "x" + str(imgh) + ".\nResizing image to 710x473.")
         img = img.resize((710, 473), Image.ANTIALIAS)
 
-    # text + background variables
-    text = getFullCaption()
-    w, h = font.getsize(text)
-
-    # edit the image
+    # text
+    captionText = checkForSplit()
     draw = ImageDraw.Draw(img)
-    draw.rectangle((x, y, x + w, y + h), fill="black")
-    draw.text((x, y), text, fill="white", font=font)
-    img.save(getOutputName() + ".jpg")
+
+    # edit the image and save
+    if type(captionText) == tuple:
+        w, h = font.getsize(captionText[1])
+        w2, h2 = font.getsize((captionText[0]))
+
+        draw.rectangle((x, y, x + w, y + h), fill="black")
+        draw.rectangle((x2, y2, x2 + w2, y2 + h2), fill="black")
+
+        draw.text((x2, y2), captionText[0], fill="white", font=font)
+        draw.text((x, y), captionText[1], fill="white", font=font)
+
+        img.save(getOutputName() + ".jpg")
+        
+    # yes i know this is clunky sorry
+    
+    else:
+        w, h = font.getsize(captionText)
+
+        draw.rectangle((x, y, x + w, y + h), fill="black")
+        draw.text((x, y), captionText, fill="white", font=font)
+
+        img.save(getOutputName() + ".jpg")
 
 
 drawText()
