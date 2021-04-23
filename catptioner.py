@@ -28,9 +28,7 @@ def checkForSplit():
         n = (text.find(" ", 42))
         for index in range(0, len(text), n):
             splitStrings.append(text[index: index + n])
-        text = splitStrings[0]
-        nextText = splitStrings[1]
-        return text, nextText
+        return splitStrings
     else:
         return text
 
@@ -41,8 +39,7 @@ def drawText():
     font = ImageFont.truetype("cinecavDmono.ttf", 19)
 
     # size variables
-    x, y = (20, 430)
-    x2, y2 = (20, 407)
+    x, y = (20, 400)
     imgw, imgh = img.size
 
     # image resizing
@@ -57,21 +54,18 @@ def drawText():
     draw = ImageDraw.Draw(img)
 
     # edit the image and save
-    if type(captionText) == tuple:
-        w, h = font.getsize(captionText[1])
-        w2, h2 = font.getsize((captionText[0]))
+    if type(captionText) == list:
+        for line in captionText:
+            w, h = font.getsize(line)
 
-        draw.rectangle((x, y, x + w, y + h), fill="black")
-        draw.rectangle((x2, y2, x2 + w2, y2 + h2), fill="black")
+            draw.rectangle((x, y, x + w, y + h), fill="black")
+            draw.text((x, y), line, fill="white", font=font)
 
-        draw.text((x2, y2), captionText[0], fill="white", font=font)
-        draw.text((x, y), captionText[1], fill="white", font=font)
-
+            y += 24
         img.save(getOutputName() + ".jpg")
-
-    # yes i know this is clunky sorry
-
+    # less clunky now !
     else:
+        y = 430
         w, h = font.getsize(captionText)
 
         draw.rectangle((x, y, x + w, y + h), fill="black")
