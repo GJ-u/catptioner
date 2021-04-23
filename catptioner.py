@@ -32,7 +32,6 @@ def checkForSplit():
         nextText = splitStrings[1]
         return text, nextText
     else:
-        print(text)
         return text
 
 
