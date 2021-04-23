@@ -25,13 +25,14 @@ def checkForSplit():
     text = getFullCaption()
     if len(text) >= 42:
         splitStrings = []
-        n = 42
+        n = (text.find(" ", 42))
         for index in range(0, len(text), n):
             splitStrings.append(text[index: index + n])
         text = splitStrings[0]
         nextText = splitStrings[1]
         return text, nextText
     else:
+        print(text)
         return text
 
 
@@ -68,9 +69,9 @@ def drawText():
         draw.text((x, y), captionText[1], fill="white", font=font)
 
         img.save(getOutputName() + ".jpg")
-        
+
     # yes i know this is clunky sorry
-    
+
     else:
         w, h = font.getsize(captionText)
 
