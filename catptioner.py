@@ -28,7 +28,11 @@ def checkForSplit():
         n = (text.find(" ", 42))
         for index in range(0, len(text), n):
             splitStrings.append(text[index: index + n])
-        return splitStrings
+        if len(splitStrings) >= 4:
+            print("The caption is too long, please type a shorter caption.\n")
+            return checkForSplit()
+        else:
+            return splitStrings
     else:
         return text
 
@@ -39,7 +43,7 @@ def drawText():
     font = ImageFont.truetype("cinecavDmono.ttf", 19)
 
     # size variables
-    x, y = (20, 400)
+    x, y = (20, 436)
     imgw, imgh = img.size
 
     # image resizing
@@ -55,17 +59,16 @@ def drawText():
 
     # edit the image and save
     if type(captionText) == list:
-        for line in captionText:
+        for line in reversed(captionText):
             w, h = font.getsize(line)
 
             draw.rectangle((x, y, x + w, y + h), fill="black")
             draw.text((x, y), line, fill="white", font=font)
 
-            y += 24
+            y -= 23
         img.save(getOutputName() + ".jpg")
-    # less clunky now !
     else:
-        y = 430
+        y = 436
         w, h = font.getsize(captionText)
 
         draw.rectangle((x, y, x + w, y + h), fill="black")
