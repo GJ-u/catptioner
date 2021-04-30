@@ -23,16 +23,23 @@ def get_output_name():
 
 def split_caption_lines():
     text = get_full_caption()
-    if len(text) >= 42:
-        split_strings = []
-        num = (text.find(" ", 42))
-        for index in range(0, len(text), num):
-            split_strings.append(text[index: index + num])
-        if len(split_strings) >= 4:
-            print("The caption is too long, please type a shorter caption.\n")
-            return split_caption_lines()
-        return split_strings
-    return [text]
+    split_strings = []
+    # keep looping until no text is left
+    while len(text) > 0:
+        # if remaining text can fit on one line, add it and end loop
+        if len(text) < 42:
+            split_strings.append(text)
+            break
+        # find the last space that appears before index 42
+        line_length = text.rfind(" ", 0, 42)
+        # append the text up until that point
+        split_strings.append(text[:line_length])
+        # keep the text that still needs to be appended and repeat
+        text = text[line_length:]
+    if len(split_strings) >= 4:
+        print("The caption is too long, please type a shorter caption.\n")
+        return split_caption_lines()
+    return split_strings
 
 
 def draw_text():
