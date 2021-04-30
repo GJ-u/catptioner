@@ -32,7 +32,7 @@ def split_caption_lines():
             print("The caption is too long, please type a shorter caption.\n")
             return split_caption_lines()
         return split_strings
-    return text
+    return [text]
 
 
 def draw_text():
@@ -57,24 +57,15 @@ def draw_text():
     draw = ImageDraw.Draw(img)
 
     # edit the image and save
-    if isinstance(caption_text, list):
-        for line in reversed(caption_text):
-            w, h = font.getsize(line)
-
-            draw.rectangle((x, y, x + w, y + h), fill="black")
-            draw.text((x, y), line, fill="white", font=font)
-
-            y -= 23
-        img.save(get_output_name() + ".jpg")
-        # less clunky now !
-    else:
-        y = 436
-        w, h = font.getsize(caption_text)
+    for line in reversed(caption_text):
+        w, h = font.getsize(line)
 
         draw.rectangle((x, y, x + w, y + h), fill="black")
-        draw.text((x, y), caption_text, fill="white", font=font)
+        draw.text((x, y), line, fill="white", font=font)
 
-        img.save(get_output_name() + ".jpg")
+        y -= 23
+    img.save(get_output_name() + ".jpg")
+    # less clunky now !
 
 
 draw_text()
