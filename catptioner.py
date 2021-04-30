@@ -3,43 +3,42 @@
 from PIL import Image, ImageFont, ImageDraw
 
 
-def getFullCaption():
-    inputTone = input("Tone: ")
-    tone = ("[ " + inputTone.upper() + " ] ")
-    captionText = input("Caption: ")
-    fullCaption = tone + captionText
-    return fullCaption
+def get_full_caption():
+    input_tone = input("Tone: ")
+    tone = ("[ " + input_tone.upper() + " ] ")
+    caption_text = input("Caption: ")
+    full_caption = tone + caption_text
+    return full_caption
 
 
-def getFilePath():
-    inputFilePath = input("Enter path to file: ")
-    return inputFilePath
+def get_file_path():
+    input_file_path = input("Enter path to file: ")
+    return input_file_path
 
 
-def getOutputName():
-    outputName = input("Enter output file name: ")
-    return outputName
+def get_output_name():
+    output_name = input("Enter output file name: ")
+    return output_name
 
 
-def checkForSplit():
-    text = getFullCaption()
+def split_caption_lines():
+    text = get_full_caption()
     if len(text) >= 42:
-        splitStrings = []
-        n = (text.find(" ", 42))
-        for index in range(0, len(text), n):
-            splitStrings.append(text[index: index + n])
-        if len(splitStrings) >= 4:
+        split_strings = []
+        num = (text.find(" ", 42))
+        for index in range(0, len(text), num):
+            split_strings.append(text[index: index + num])
+        if len(split_strings) >= 4:
             print("The caption is too long, please type a shorter caption.\n")
-            return checkForSplit()
-        else:
-            return splitStrings
-    else:
-        return text
+            return split_caption_lines()
+        return split_strings
+    return text
 
 
-def drawText():
+def draw_text():
+
     # appearance variables
-    img = Image.open(getFilePath())
+    img = Image.open(get_file_path())
     font = ImageFont.truetype("cinecavDmono.ttf", 19)
 
     # size variables
@@ -54,27 +53,28 @@ def drawText():
         img = img.resize((710, 473), Image.ANTIALIAS)
 
     # text
-    captionText = checkForSplit()
+    caption_text = split_caption_lines()
     draw = ImageDraw.Draw(img)
 
     # edit the image and save
-    if type(captionText) == list:
-        for line in reversed(captionText):
+    if isinstance(caption_text, list):
+        for line in reversed(caption_text):
             w, h = font.getsize(line)
 
             draw.rectangle((x, y, x + w, y + h), fill="black")
             draw.text((x, y), line, fill="white", font=font)
 
             y -= 23
-        img.save(getOutputName() + ".jpg")
+        img.save(get_output_name() + ".jpg")
+        # less clunky now !
     else:
         y = 436
-        w, h = font.getsize(captionText)
+        w, h = font.getsize(caption_text)
 
         draw.rectangle((x, y, x + w, y + h), fill="black")
-        draw.text((x, y), captionText, fill="white", font=font)
+        draw.text((x, y), caption_text, fill="white", font=font)
 
-        img.save(getOutputName() + ".jpg")
+        img.save(get_output_name() + ".jpg")
 
 
-drawText()
+draw_text()
